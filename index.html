@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Image Optimizer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h1>AI Image Optimizer</h1>
+
+<div class="drop-zone" id="dropZone">
+  <p>Drag & Drop or Click to Upload</p>
+  <input type="file" id="upload" multiple accept="image/*">
+</div>
+
+<div id="previewContainer"></div>
+
+<div class="controls">
+
+<label>Resize (%)</label>
+<input type="range" id="resize" min="10" max="100" value="100">
+
+<label>Quality (%)</label>
+<input type="range" id="quality" min="10" max="100" value="80">
+
+<label>Target Size (KB)</label>
+<input type="number" id="targetSize" placeholder="Optional">
+
+<label>Format</label>
+<select id="format">
+  <option value="image/jpeg">JPG</option>
+  <option value="image/png">PNG</option>
+  <option value="image/webp">WEBP</option>
+</select>
+
+</div>
+
+<div class="buttons">
+<button onclick="processAll()">Optimize</button>
+<button onclick="toggleDark()">🌙</button>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
