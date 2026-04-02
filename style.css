@@ -64,3 +64,39 @@ button {
   background: #111;
   color: white;
 }
+.range-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.range-group select {
+  flex: 1;
+  padding: 8px;
+}
+
+#resultContainer {
+  margin-top: 20px;
+}
+
+.result-card {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.result-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.download-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
