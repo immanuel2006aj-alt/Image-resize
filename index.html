@@ -36,10 +36,31 @@
   <option value="image/png">PNG</option>
   <option value="image/webp">WEBP</option>
 </select>
+</div>
+<label>Target Size Range</label>
 
+<div class="range-group">
+  <select id="minSize">
+    <option value="10">10 KB</option>
+    <option value="50">50 KB</option>
+    <option value="100">100 KB</option>
+    <option value="500">500 KB</option>
+    <option value="1024">1 MB</option>
+  </select>
+
+  <span>to</span>
+
+  <select id="maxSize">
+    <option value="100">100 KB</option>
+    <option value="500">500 KB</option>
+    <option value="1024">1 MB</option>
+    <option value="2048">2 MB</option>
+    <option value="5120">5 MB</option>
+  </select>
 </div>
 
 <div class="buttons">
+<div id="resultContainer"></div>
 <button onclick="processAll()">Optimize</button>
 <button onclick="toggleDark()">🌙</button>
 </div>
