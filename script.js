@@ -41,12 +41,18 @@ function showPreviews() {
 
 async function processAll() {
   const resize = document.getElementById("resize").value / 100;
-  let quality = document.getElementById("quality").value / 100;
-  const targetKB = document.getElementById("targetSize").value;
   const format = document.getElementById("format").value;
 
+  const minKB = parseInt(document.getElementById("minSize").value);
+  const maxKB = parseInt(document.getElementById("maxSize").value);
+
+  const resultContainer = document.getElementById("resultContainer");
+  resultContainer.innerHTML = "";
+
   for (let file of files) {
+
     let img = await loadImage(file);
+
     let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
 
@@ -55,46 +61,63 @@ async function processAll() {
 
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    let blob = await compress(canvas, format, quality, targetKB);
+    let blob = await compressToRange(canvas, format, minKB, maxKB);
 
-    download(blob, file.name);
+    showResult(blob);
   }
 }
-
-function loadImage(file) {
-  return new Promise(res => {
-    const img = new Image();
-    img.onload = () => res(img);
-    img.src = URL.createObjectURL(file);
-  });
-}
-
-function compress(canvas, format, quality, targetKB) {
+function compressToRange(canvas, format, minKB, maxKB) {
   return new Promise(resolve => {
 
-    function attempt(q) {
-      canvas.toBlob(blob => {
-        let sizeKB = blob.size / 1024;
+    let q = 0.9;
 
-        if (targetKB && sizeKB > targetKB && q > 0.1) {
-          attempt(q - 0.05);
+    function tryCompress() {
+      canvas.toBlob(blob => {
+
+        let size = blob.size / 1024;
+
+        if (size > maxKB && q > 0.1) {
+          q -= 0.05;
+          tryCompress();
+        } else if (size < minKB && q < 1) {
+          q += 0.05;
+          tryCompress();
         } else {
           resolve(blob);
         }
+
       }, format, q);
     }
 
-    attempt(quality);
+    tryCompress();
   });
-}
+            }
+function showResult(blob) {
+  const container = document.getElementById("resultContainer");
 
-function download(blob, name) {
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "optimized_" + name;
-  link.click();
-}
+  const div = document.createElement("div");
+  div.className = "result-card";
 
-function toggleDark() {
-  document.body.classList.toggle("dark");
-                  }
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(blob);
+
+  const size = document.createElement("p");
+  size.innerText = `Final Size: ${(blob.size/1024).toFixed(1)} KB`;
+
+  const btn = document.createElement("button");
+  btn.innerText = "Download Image";
+  btn.className = "download-btn";
+
+  btn.onclick = () => {
+    const link = document.createElement("a");
+    link.href = img.src;
+    link.download = "optimized.jpg";
+    link.click();
+  };
+
+  div.appendChild(img);
+  div.appendChild(size);
+  div.appendChild(btn);
+
+  container.appendChild(div);
+}
